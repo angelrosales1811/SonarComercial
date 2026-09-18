@@ -20,6 +20,7 @@ export default function MapView({ clients, polygon }: Props) {
       {polygon && (
         <GeoJSON
           data={polygon}
+          interactive={false}
           style={{
             color: '#044627',
             weight: 2,
