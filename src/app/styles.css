@@ -663,7 +663,7 @@ input {
   /* Zoom */
 
   .leaflet-bottom.leaflet-right {
-    bottom: 180px;
+    bottom: 100px;
 
     right: 8px;
   }
