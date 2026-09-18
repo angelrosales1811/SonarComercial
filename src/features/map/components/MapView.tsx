@@ -1,4 +1,4 @@
-import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from 'react-leaflet';
+import { CircleMarker, MapContainer, Popup, TileLayer, ZoomControl } from 'react-leaflet';
 import type { MapClient } from '../../../types/map.types';
 
 interface Props {
@@ -14,7 +14,15 @@ export default function MapView({ clients }: Props) {
       />
 
       {clients.map((client) => (
-        <Marker key={client.id} position={client.position}>
+        <CircleMarker
+          key={client.id}
+          center={client.position}
+          radius={6}
+          fillColor="#3b82f6"
+          color="#ffffff"
+          weight={1}
+          fillOpacity={0.9}
+        >
           <Popup>
             <strong>{client.name}</strong>
 
@@ -26,7 +34,7 @@ export default function MapView({ clients }: Props) {
 
             {client.attributes.c2}
           </Popup>
-        </Marker>
+        </CircleMarker>
       ))}
 
       <ZoomControl position="bottomright" />
