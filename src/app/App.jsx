@@ -15,6 +15,10 @@ export default function App() {
     const file = event.target.files?.[0];
     if (!file) return;
 
+    console.log(file.name);
+    console.log(file.size);
+    console.log(file.type);
+
     try {
       const rows = await importClients(file);
 
@@ -28,6 +32,24 @@ export default function App() {
     }
   }
 
+  function downloadTemplate() {
+    const link = document.createElement('a');
+
+    link.href = '/templates/Formato_excel_clientes.xlsx';
+
+    link.download = 'Formato_excel_clientes.xlsx';
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+  }
+
+  function clearMap() {
+    setClients([]);
+  }
+
   return (
     <main className="layout">
       <header className="app-header">
@@ -35,7 +57,9 @@ export default function App() {
           <span className="badge">Echogeolocalizacion Comercial</span>
           <h1>SONAR COMERCIAL</h1>
         </div>
-        <button className="btn format-excel-btn">Formato Excel</button>
+        <button className="btn format-excel-btn" onClick={downloadTemplate}>
+          📄 Descargar Formato Excel
+        </button>
       </header>
 
       <section className="map-section">
@@ -51,7 +75,7 @@ export default function App() {
       </aside> */}
 
       <footer className="bottom-console">
-        <label htmlFor="file" className="btn btn-primary">
+        <label htmlFor="file" className="btn btn-secondary">
           📁 Seleccionar archivo
         </label>
 
@@ -62,6 +86,9 @@ export default function App() {
           className="file-input"
           onChange={handleFileChange}
         />
+        <button className="btn btn-secondary" onClick={clearMap}>
+          X
+        </button>
 
         <div className="actions">
           <button className="btn btn-primary">Generar Polígono</button>
