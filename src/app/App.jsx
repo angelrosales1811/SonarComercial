@@ -3,7 +3,7 @@ import MapView from '../features/map/components/MapView';
 import { importClients } from '../services/excelImport.service';
 import { mapExcelRow } from '../utils/clientMapper';
 import { clientToMapClient } from '../utils/clientToMapClient';
-
+import { generateConvexHull } from '../utils/convexHull';
 // import StatsCard from "./components/StatsCard";
 // import TerritoryPanel from "./components/TerritoryPanel";
 // import ClientsPanel from "./components/ClientsPanel";
@@ -11,14 +11,11 @@ import { clientToMapClient } from '../utils/clientToMapClient';
 export default function App() {
   const [clients, setClients] = useState([]);
 
+  const [polygon, setPolygon] = useState(null);
+
   async function handleFileChange(event) {
     const file = event.target.files?.[0];
     if (!file) return;
-
-    console.log(file.name);
-    console.log(file.size);
-    console.log(file.type);
-
     try {
       const rows = await importClients(file);
 
@@ -48,8 +45,19 @@ export default function App() {
 
   function clearMap() {
     setClients([]);
+    setPolygon(null);
   }
 
+  function generatePolygon() {
+    const hull = generateConvexHull(clients);
+
+    if (!hull) {
+      alert('Se requieren al menos 3 clientes');
+      return;
+    }
+
+    setPolygon(hull);
+  }
   return (
     <main className="layout">
       <header className="app-header">
@@ -63,7 +71,7 @@ export default function App() {
       </header>
 
       <section className="map-section">
-        <MapView clients={clients} />
+        <MapView clients={clients} polygon={polygon} />
       </section>
 
       {/* <aside className="sidebar">
@@ -76,7 +84,7 @@ export default function App() {
 
       <footer className="bottom-console">
         <label htmlFor="file" className="btn btn-secondary">
-          📁 Seleccionar archivo
+          📁 Cargar archivo
         </label>
 
         <input
@@ -91,7 +99,13 @@ export default function App() {
         </button>
 
         <div className="actions">
-          <button className="btn btn-primary">Generar Polígono</button>
+          <button
+            className="btn btn-primary"
+            onClick={generatePolygon}
+            disabled={clients.length < 3}
+          >
+            Generar Polígono
+          </button>
           <button className="btn btn-primary">Descargar Excel</button>
         </div>
       </footer>

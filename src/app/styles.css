@@ -565,8 +565,8 @@ input {
   }
 }
 
-.leaflet-interactive {
-  filter: drop-shadow(0 0 6px #00b4ff) drop-shadow(0 0 12px #00b4ff);
+.client-marker {
+  filter: drop-shadow(0 0 6px rgba(0, 212, 255, 0.8)) drop-shadow(0 0 12px rgba(0, 212, 255, 0.5));
 }
 /* ==========================================================
    MOBILE
