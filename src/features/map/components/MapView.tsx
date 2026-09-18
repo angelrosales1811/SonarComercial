@@ -1,4 +1,4 @@
-import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from 'react-leaflet';
+import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
 
 export default function MapView() {
   return (
@@ -8,9 +8,9 @@ export default function MapView() {
         attribution="OpenStreetMap"
       />
 
-      <Marker position={[19.0413, -98.2062]}>
+      {/* <Marker position={[19.0413, -98.2062]}>
         <Popup>Puebla</Popup>
-      </Marker>
+      </Marker> */}
       <ZoomControl position="bottomright" />
     </MapContainer>
   );
