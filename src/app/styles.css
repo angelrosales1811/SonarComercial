@@ -218,6 +218,14 @@ input {
   font-weight: 700;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-left: auto;
+}
+
 /* ==========================================================
    MAP
    ========================================================== */
@@ -490,6 +498,8 @@ input {
 /* HEADER BUTTON */
 
 .format-excel-btn {
+  padding: 10px;
+
   background: var(--secondary-700);
 
   color: var(--secondary-100);
@@ -723,9 +733,18 @@ input {
   /* Header */
 
   .app-header {
-    height: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+  }
 
-    padding-inline: 10px;
+  .header-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 16px;
+    margin-left: auto;
   }
 
   .app-header h1 {

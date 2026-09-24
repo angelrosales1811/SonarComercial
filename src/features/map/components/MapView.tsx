@@ -1,6 +1,7 @@
 import * as turf from '@turf/turf';
 import type { Feature, Polygon } from 'geojson';
 import { useEffect, useState } from 'react';
+import { FiDisc, FiEye, FiGlobe, FiMap, FiMapPin, FiTarget, FiX } from 'react-icons/fi';
 import {
   CircleMarker,
   GeoJSON,
@@ -281,39 +282,39 @@ export default function MapView({
           <div className="context-menu-header">Territorio</div>
 
           <button className="context-menu-item" onClick={downloadVertices}>
-            <span>📍</span>
+            <FiMap />
             <span>Descargar vértices</span>
           </button>
 
           <button className="context-menu-item" onClick={downloadKml}>
-            <span>🌎</span>
+            <FiMapPin />
             <span>Exportar KML Territorio</span>
           </button>
 
           <button className="context-menu-item" onClick={toggleClients}>
-            <span>👁️</span>
+            <FiEye />
             <span>{showClients ? 'Ocultar clientes' : 'Mostrar clientes'}</span>
           </button>
 
           <button className="context-menu-item" onClick={showInsideProspects}>
-            <span>🎯</span>
+            <FiTarget />
             <span>Prospectos dentro</span>
           </button>
 
           <button className="context-menu-item" onClick={showOutsideProspects}>
-            <span>🚫</span>
+            <FiDisc />
             <span>Prospectos fuera</span>
           </button>
 
           <button className="context-menu-item" onClick={showAllProspects}>
-            <span>🌎</span>
+            <FiGlobe />
             <span>Prospectos Completos</span>
           </button>
 
           <div className="context-menu-divider" />
 
           <button className="context-menu-item danger" onClick={() => setContextMenu(null)}>
-            <span>✖</span>
+            <FiX />
             <span>Cerrar</span>
           </button>
         </div>

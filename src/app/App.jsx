@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { FiDownload, FiTrash2, FiUpload } from 'react-icons/fi';
 import * as XLSX from 'xlsx';
 import MapView from '../features/map/components/MapView';
 import { importClients } from '../services/excelImport.service';
@@ -114,18 +115,20 @@ export default function App() {
     <main className="layout">
       <header className="app-header">
         <div>
-          <span className="badge">Echogeolocalizacion Comercial</span>
+          <span className="badge">ECHOGEOLOCALIZACION COMERCIAL</span>
           <h1>SONAR COMERCIAL</h1>
         </div>
-        <button className="btn format-excel-btn" onClick={() => downloadTemplate(1)}>
-          📄 Ejemplo Formato Clientes
-        </button>
 
-        <button className="btn format-excel-btn" onClick={() => downloadTemplate(2)}>
-          📄 Ejemplo Formato Prospectos
-        </button>
+        <div className="header-actions">
+          <button className="btn format-excel-btn" onClick={() => downloadTemplate(1)}>
+            <FiDownload /> Ejemplo Clientes
+          </button>
+
+          <button className="btn format-excel-btn" onClick={() => downloadTemplate(2)}>
+            <FiDownload /> Ejemplo Prospectos
+          </button>
+        </div>
       </header>
-
       <section className="map-section">
         <MapView
           clients={clients}
@@ -145,7 +148,7 @@ export default function App() {
 
       <footer className="bottom-console">
         <label htmlFor="file" className="btn btn-secondary">
-          📁 Cargar clientes
+          <FiUpload /> Clientes
         </label>
 
         <input
@@ -156,7 +159,7 @@ export default function App() {
           onChange={(e) => loadData(e, setClients, true)}
         />
         <button className="btn btn-secondary" onClick={clearMap}>
-          X
+          <FiTrash2 />
         </button>
 
         <div className="actions">
@@ -168,7 +171,7 @@ export default function App() {
             Generar Polígono
           </button> */}
           <label htmlFor="prospects-file" className="btn btn-primary">
-            Cargar Prospectos
+            <FiUpload /> Prospectos
           </label>
 
           <input
@@ -178,13 +181,13 @@ export default function App() {
             className="file-input"
             onChange={(e) => loadData(e, setProspects, false)}
           />
-          <button
-            className="btn btn-primary"
-            onClick={prospectsVisible}
-            disabled={!visibleProspects.length}
-          >
-            📊 Descargar Prospectos ({visibleProspects.length})
-          </button>
+
+          {visibleProspects.length > 0 && (
+            <button className="btn btn-primary" onClick={prospectsVisible}>
+              <FiDownload />
+              <span>Prospectos ({visibleProspects.length})</span>
+            </button>
+          )}
         </div>
       </footer>
     </main>
