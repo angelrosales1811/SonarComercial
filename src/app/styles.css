@@ -498,8 +498,8 @@ input {
 /* HEADER BUTTON */
 
 .format-excel-btn {
-  padding: 10px;
-
+  padding: 20px;
+  width: 145px;
   background: var(--secondary-700);
 
   color: var(--secondary-100);

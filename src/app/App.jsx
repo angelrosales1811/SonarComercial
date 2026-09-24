@@ -121,11 +121,17 @@ export default function App() {
 
         <div className="header-actions">
           <button className="btn format-excel-btn" onClick={() => downloadTemplate(1)}>
-            <FiDownload /> Ejemplo Clientes
+            <FiDownload />
+            Ejemplo
+            <br />
+            Clientes
           </button>
 
           <button className="btn format-excel-btn" onClick={() => downloadTemplate(2)}>
-            <FiDownload /> Ejemplo Prospectos
+            <FiDownload />
+            Ejemplo
+            <br />
+            Prospectos
           </button>
         </div>
       </header>
