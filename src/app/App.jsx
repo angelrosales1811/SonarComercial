@@ -10,24 +10,8 @@ import { generateConvexHull } from '../utils/convexHull';
 
 export default function App() {
   const [clients, setClients] = useState([]);
-
-  const [polygon, setPolygon] = useState(null);
-
-  async function handleFileChange(event) {
-    const file = event.target.files?.[0];
-    if (!file) return;
-    try {
-      const rows = await importClients(file);
-
-      const mappedClients = rows.map(mapExcelRow).map(clientToMapClient);
-
-      setClients(mappedClients);
-
-      console.log('Clientes cargados:', mappedClients);
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  const [polygonClients, setPolygonClients] = useState(null);
+  const [prospects, setProspects] = useState([]);
 
   function downloadTemplate() {
     const link = document.createElement('a');
@@ -45,7 +29,8 @@ export default function App() {
 
   function clearMap() {
     setClients([]);
-    setPolygon(null);
+    setProspects([]);
+    setPolygonClients(null);
   }
 
   function generatePolygon() {
@@ -56,8 +41,33 @@ export default function App() {
       return;
     }
 
-    setPolygon(hull);
+    setPolygonClients(hull);
   }
+
+  async function loadData(event, setter, generateHull = false) {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    try {
+      const rows = await importClients(file);
+
+      const mappedData = rows.map(mapExcelRow).map(clientToMapClient);
+
+      setter(mappedData);
+
+      if (generateHull) {
+        const hull = generateConvexHull(mappedData);
+
+        if (hull) {
+          setPolygonClients(hull);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <main className="layout">
       <header className="app-header">
@@ -71,7 +81,7 @@ export default function App() {
       </header>
 
       <section className="map-section">
-        <MapView clients={clients} polygon={polygon} />
+        <MapView clients={clients} prospects={prospects} polygonClients={polygonClients} />
       </section>
 
       {/* <aside className="sidebar">
@@ -84,7 +94,7 @@ export default function App() {
 
       <footer className="bottom-console">
         <label htmlFor="file" className="btn btn-secondary">
-          📁 Cargar archivo
+          📁 Cargar clientes
         </label>
 
         <input
@@ -92,21 +102,38 @@ export default function App() {
           type="file"
           accept=".xlsx,.xls"
           className="file-input"
-          onChange={handleFileChange}
+          onChange={(e) => loadData(e, setClients, true)}
         />
         <button className="btn btn-secondary" onClick={clearMap}>
           X
         </button>
 
         <div className="actions">
-          <button
+          {/* <button
             className="btn btn-primary"
             onClick={generatePolygon}
             disabled={clients.length < 3}
           >
             Generar Polígono
-          </button>
-          <button className="btn btn-primary">Descargar Excel</button>
+          </button> */}
+          <label htmlFor="prospects-file" className="btn btn-primary">
+            Cargar Prospectos
+          </label>
+
+          <input
+            id="prospects-file"
+            type="file"
+            accept=".xlsx,.xls"
+            className="file-input"
+            onChange={(e) => loadData(e, setProspects, false)}
+          />
+          {/* <button
+            className="btn btn-primary"
+            onClick={prospectsVisible}
+            disabled={clients.length < 3}
+          >
+            Descargar Prospectos
+          </button> */}
         </div>
       </footer>
     </main>
