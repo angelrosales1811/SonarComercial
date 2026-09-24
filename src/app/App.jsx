@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { FiDownload, FiTrash2, FiUpload } from 'react-icons/fi';
+import { useEffect, useState } from 'react';
+import { FiChevronDown, FiDownload, FiFileText, FiTrash2, FiUpload, FiUsers } from 'react-icons/fi';
 import * as XLSX from 'xlsx';
 import MapView from '../features/map/components/MapView';
 import { importClients } from '../services/excelImport.service';
@@ -15,6 +15,22 @@ export default function App() {
   const [polygonClients, setPolygonClients] = useState(null);
   const [prospects, setProspects] = useState([]);
   const [visibleProspects, setVisibleProspects] = useState([]);
+
+  const [showExamplesMenu, setShowExamplesMenu] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = () => {
+      setShowExamplesMenu(false);
+    };
+
+    if (showExamplesMenu) {
+      document.addEventListener('click', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [showExamplesMenu]);
 
   function downloadTemplate(type) {
     const link = document.createElement('a');
@@ -119,20 +135,43 @@ export default function App() {
           <h1>SONAR COMERCIAL</h1>
         </div>
 
-        <div className="header-actions">
-          <button className="btn format-excel-btn" onClick={() => downloadTemplate(1)}>
+        <div className="header-actions" onClick={(e) => e.stopPropagation()}>
+          <button
+            className="btn format-excel-btn"
+            onClick={() => setShowExamplesMenu(!showExamplesMenu)}
+          >
             <FiDownload />
-            Ejemplo
-            <br />
-            Clientes
+            <span>Ejemplos</span>
+            <FiChevronDown className={showExamplesMenu ? 'rotate' : ''} />
           </button>
 
-          <button className="btn format-excel-btn" onClick={() => downloadTemplate(2)}>
-            <FiDownload />
-            Ejemplo
-            <br />
-            Prospectos
-          </button>
+          {showExamplesMenu && (
+            <div className="examples-menu">
+              <div className="context-menu-header">FORMATOS</div>
+
+              <button
+                className="examples-menu-item"
+                onClick={() => {
+                  downloadTemplate(1);
+                  setShowExamplesMenu(false);
+                }}
+              >
+                <FiUsers />
+                <span>Formato Clientes</span>
+              </button>
+
+              <button
+                className="examples-menu-item"
+                onClick={() => {
+                  downloadTemplate(2);
+                  setShowExamplesMenu(false);
+                }}
+              >
+                <FiFileText />
+                <span>Formato Prospectos</span>
+              </button>
+            </div>
+          )}
         </div>
       </header>
       <section className="map-section">
