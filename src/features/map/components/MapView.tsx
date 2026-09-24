@@ -17,9 +17,15 @@ interface Props {
   clients: MapClient[];
   prospects: MapClient[];
   polygonClients: Feature<Polygon> | null;
+  onVisibleProspectsChange?: (prospects: MapClient[]) => void;
 }
 
-export default function MapView({ clients, prospects, polygonClients }: Props) {
+export default function MapView({
+  clients,
+  prospects,
+  polygonClients,
+  onVisibleProspectsChange,
+}: Props) {
   const [contextMenu, setContextMenu] = useState<{
     visible: boolean;
     x: number;
@@ -50,6 +56,10 @@ export default function MapView({ clients, prospects, polygonClients }: Props) {
 
     return prospectFilter === 'INSIDE' ? inside : !inside;
   });
+
+  useEffect(() => {
+    onVisibleProspectsChange?.(visibleProspects);
+  }, [visibleProspects, onVisibleProspectsChange]);
 
   function showPolygonContextMenu(event: any) {
     const originalEvent = event.originalEvent;

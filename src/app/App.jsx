@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import * as XLSX from 'xlsx';
 import MapView from '../features/map/components/MapView';
 import { importClients } from '../services/excelImport.service';
 import { mapExcelRow } from '../utils/clientMapper';
@@ -12,24 +13,28 @@ export default function App() {
   const [clients, setClients] = useState([]);
   const [polygonClients, setPolygonClients] = useState(null);
   const [prospects, setProspects] = useState([]);
+  const [visibleProspects, setVisibleProspects] = useState([]);
 
-  function downloadTemplate() {
+  function downloadTemplate(type) {
     const link = document.createElement('a');
 
-    link.href = '/templates/Formato_excel_clientes.xlsx';
-
-    link.download = 'Formato_excel_clientes.xlsx';
+    if (type === 1) {
+      link.href = '/templates/Formato_excel_clientes.xlsx';
+      link.download = 'Formato_excel_clientes.xlsx';
+    } else {
+      link.href = '/templates/Formato_excel_prospectos.xlsx';
+      link.download = 'Formato_excel_prospectos.xlsx';
+    }
 
     document.body.appendChild(link);
-
     link.click();
-
     document.body.removeChild(link);
   }
 
   function clearMap() {
     setClients([]);
     setProspects([]);
+    setVisibleProspects([]);
     setPolygonClients(null);
   }
 
@@ -68,6 +73,43 @@ export default function App() {
     }
   }
 
+  function prospectsVisible() {
+    if (!visibleProspects.length) {
+      alert('No hay prospectos para exportar');
+      return;
+    }
+
+    const rows = visibleProspects.map((prospect) => ({
+      id: prospect.id,
+
+      name: prospect.name,
+
+      lat: prospect.position[0],
+
+      lng: prospect.position[1],
+
+      c1: prospect.attributes?.c1 ?? '',
+
+      c2: prospect.attributes?.c2 ?? '',
+
+      c3: prospect.attributes?.c3 ?? '',
+
+      c4: prospect.attributes?.c4 ?? '',
+
+      c5: prospect.attributes?.c5 ?? '',
+
+      c6: prospect.attributes?.c6 ?? '',
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(rows);
+
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Prospectos');
+
+    XLSX.writeFile(workbook, 'Prospectos_Visibles.xlsx');
+  }
+
   return (
     <main className="layout">
       <header className="app-header">
@@ -75,13 +117,22 @@ export default function App() {
           <span className="badge">Echogeolocalizacion Comercial</span>
           <h1>SONAR COMERCIAL</h1>
         </div>
-        <button className="btn format-excel-btn" onClick={downloadTemplate}>
-          📄 Descargar Formato Excel
+        <button className="btn format-excel-btn" onClick={() => downloadTemplate(1)}>
+          📄 Ejemplo Formato Clientes
+        </button>
+
+        <button className="btn format-excel-btn" onClick={() => downloadTemplate(2)}>
+          📄 Ejemplo Formato Prospectos
         </button>
       </header>
 
       <section className="map-section">
-        <MapView clients={clients} prospects={prospects} polygonClients={polygonClients} />
+        <MapView
+          clients={clients}
+          prospects={prospects}
+          polygonClients={polygonClients}
+          onVisibleProspectsChange={setVisibleProspects}
+        />
       </section>
 
       {/* <aside className="sidebar">
@@ -127,13 +178,13 @@ export default function App() {
             className="file-input"
             onChange={(e) => loadData(e, setProspects, false)}
           />
-          {/* <button
+          <button
             className="btn btn-primary"
             onClick={prospectsVisible}
-            disabled={clients.length < 3}
+            disabled={!visibleProspects.length}
           >
-            Descargar Prospectos
-          </button> */}
+            📊 Descargar Prospectos ({visibleProspects.length})
+          </button>
         </div>
       </footer>
     </main>
