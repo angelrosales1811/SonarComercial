@@ -140,6 +140,7 @@ export default function App() {
             className="btn format-excel-btn"
             onClick={() => setShowExamplesMenu(!showExamplesMenu)}
           >
+            <span className="step-badge">0</span>
             <FiDownload />
             <span>Ejemplos</span>
             <FiChevronDown className={showExamplesMenu ? 'rotate' : ''} />
@@ -193,6 +194,7 @@ export default function App() {
 
       <footer className="bottom-console">
         <label htmlFor="file" className="btn btn-secondary">
+          <span className="step-badge">1</span>
           <FiUpload /> Clientes
         </label>
 
@@ -216,6 +218,7 @@ export default function App() {
             Generar Polígono
           </button> */}
           <label htmlFor="prospects-file" className="btn btn-primary">
+            <span className="step-badge">2</span>
             <FiUpload /> Prospectos
           </label>
 
@@ -229,6 +232,7 @@ export default function App() {
 
           {visibleProspects.length > 0 && (
             <button className="btn btn-primary" onClick={prospectsVisible}>
+              <span className="step-badge">3</span>
               <FiDownload />
               <span>Prospectos ({visibleProspects.length})</span>
             </button>

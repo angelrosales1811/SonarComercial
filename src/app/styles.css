@@ -624,7 +624,7 @@ input {
 
 .format-excel-btn {
   padding: 20px;
-  width: 145px;
+  width: 160px;
   background: var(--secondary-700);
 
   color: var(--secondary-100);
@@ -646,6 +646,36 @@ input {
   background: rgba(37, 99, 235, 0.3);
 
   box-shadow: 0 0 18px rgba(59, 130, 246, 0.35);
+}
+
+.format-excel-btn {
+  position: relative;
+}
+
+.format-excel-btn .step-badge {
+  z-index: 20;
+}
+
+.step-badge {
+  position: absolute;
+
+  top: 4px;
+  right: 6px;
+
+  width: 18px;
+  height: 18px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #dc2626;
+  color: white;
+
+  font-size: 10px;
+  font-weight: 700;
 }
 
 /* ==========================================================
