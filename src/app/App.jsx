@@ -136,16 +136,17 @@ export default function App() {
         </div>
 
         <div className="header-actions" onClick={(e) => e.stopPropagation()}>
-          <button
-            className="btn format-excel-btn"
-            onClick={() => setShowExamplesMenu(!showExamplesMenu)}
-          >
-            <span className="step-badge">0</span>
-            <FiDownload />
-            <span>Ejemplos</span>
-            <FiChevronDown className={showExamplesMenu ? 'rotate' : ''} />
-          </button>
-
+          <div className="step-wrapper">
+            <span className="step-badge">0</span> 
+            <button
+              className="btn format-excel-btn"
+              onClick={() => setShowExamplesMenu(!showExamplesMenu)}
+            >
+              <FiDownload />
+              <span>Ejemplos</span>
+              <FiChevronDown className={showExamplesMenu ? 'rotate' : ''} />
+            </button>
+          </div>
           {showExamplesMenu && (
             <div className="examples-menu">
               <div className="context-menu-header">FORMATOS</div>
@@ -193,10 +194,14 @@ export default function App() {
       </aside> */}
 
       <footer className="bottom-console">
-        <label htmlFor="file" className="btn btn-secondary">
+        <div className="step-wrapper">
           <span className="step-badge">1</span>
-          <FiUpload /> Clientes
-        </label>
+
+          <label htmlFor="file" className="btn btn-secondary">
+            <FiUpload />
+            Clientes
+          </label>
+        </div>
 
         <input
           id="file"
@@ -217,10 +222,14 @@ export default function App() {
           >
             Generar Polígono
           </button> */}
-          <label htmlFor="prospects-file" className="btn btn-primary">
+          <div className="step-wrapper">
             <span className="step-badge">2</span>
-            <FiUpload /> Prospectos
-          </label>
+
+            <label htmlFor="prospects-file" className="btn btn-primary">
+              <FiUpload />
+              Prospectos
+            </label>
+          </div>
 
           <input
             id="prospects-file"
@@ -231,11 +240,13 @@ export default function App() {
           />
 
           {visibleProspects.length > 0 && (
-            <button className="btn btn-primary" onClick={prospectsVisible}>
+            <div className="step-wrapper">
               <span className="step-badge">3</span>
-              <FiDownload />
-              <span>Prospectos ({visibleProspects.length})</span>
-            </button>
+              <button className="btn btn-primary" onClick={prospectsVisible}>
+                <FiDownload />
+                <span>Prospectos ({visibleProspects.length})</span>
+              </button>
+            </div>
           )}
         </div>
       </footer>
