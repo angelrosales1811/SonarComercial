@@ -1,6 +1,7 @@
 import * as turf from '@turf/turf';
 import type { Feature, Polygon } from 'geojson';
-import { useEffect, useState } from 'react';
+import L from 'leaflet';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { FiDisc, FiEye, FiGlobe, FiMap, FiMapPin, FiTarget, FiX } from 'react-icons/fi';
 import {
   CircleMarker,
@@ -19,6 +20,7 @@ interface Props {
   prospects: MapClient[];
   polygonClients: Feature<Polygon> | null;
   onVisibleProspectsChange?: (prospects: MapClient[]) => void;
+  onProspectModeChange?: (mode: 'PROSPECTS' | 'CAPTABLES') => void;
 }
 
 export default function MapView({
@@ -26,6 +28,7 @@ export default function MapView({
   prospects,
   polygonClients,
   onVisibleProspectsChange,
+  onProspectModeChange,
 }: Props) {
   const [contextMenu, setContextMenu] = useState<{
     visible: boolean;
@@ -34,8 +37,17 @@ export default function MapView({
   } | null>(null);
 
   const [showClients, setShowClients] = useState(true);
-  const [showOnlyInsideProspects, setShowOnlyInsideProspects] = useState(false);
-  type ProspectFilter = 'ALL' | 'INSIDE' | 'OUTSIDE';
+  const [captureDistanceMeters, setCaptureDistanceMeters] = useState(10);
+
+  const sliderRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!sliderRef.current) return;
+
+    L.DomEvent.disableClickPropagation(sliderRef.current);
+    L.DomEvent.disableScrollPropagation(sliderRef.current);
+  }, []);
+  type ProspectFilter = 'ALL' | 'INSIDE' | 'OUTSIDE' | 'CAPTABLES';
 
   const [prospectFilter, setProspectFilter] = useState<ProspectFilter>('ALL');
   useEffect(() => {
@@ -43,20 +55,38 @@ export default function MapView({
     setContextMenu(null);
   }, [clients, prospects]);
 
-  const visibleProspects = prospects.filter((prospect) => {
-    if (!polygonClients || prospectFilter === 'ALL') {
-      return true;
-    }
+  const visibleProspects = useMemo(() => {
+    return prospects.filter((prospect) => {
+      if (prospectFilter === 'CAPTABLES') {
+        return isCaptable(prospect, clients, polygonClients, captureDistanceMeters);
+      }
 
-    const point = turf.point([
-      prospect.position[1], // lng
-      prospect.position[0], // lat
-    ]);
+      if (!polygonClients || prospectFilter === 'ALL') {
+        return true;
+      }
 
-    const inside = turf.booleanPointInPolygon(point, polygonClients);
+      const point = turf.point([prospect.position[1], prospect.position[0]]);
 
-    return prospectFilter === 'INSIDE' ? inside : !inside;
-  });
+      const inside = turf.booleanPointInPolygon(point, polygonClients);
+
+      switch (prospectFilter) {
+        case 'INSIDE':
+          return inside;
+
+        case 'OUTSIDE':
+          return !inside;
+
+        default:
+          return true;
+      }
+    });
+  }, [prospects, clients, polygonClients, prospectFilter, captureDistanceMeters]);
+
+  const captablesCount = useMemo(() => {
+    return prospects.filter((prospect) =>
+      isCaptable(prospect, clients, polygonClients, captureDistanceMeters)
+    ).length;
+  }, [prospects, clients, polygonClients, captureDistanceMeters]);
 
   useEffect(() => {
     onVisibleProspectsChange?.(visibleProspects);
@@ -167,27 +197,67 @@ export default function MapView({
     setContextMenu(null);
   }
 
-  // function prospectsIn() {
-  //   setShowOnlyInsideProspects((prev) => {
-  //     return !prev;
-  //   });
-
-  //   setContextMenu(null);
-  // }
-
   function showInsideProspects() {
     setProspectFilter('INSIDE');
+    onProspectModeChange?.('PROSPECTS');
     setContextMenu(null);
   }
 
   function showOutsideProspects() {
     setProspectFilter('OUTSIDE');
+    onProspectModeChange?.('PROSPECTS');
     setContextMenu(null);
   }
 
   function showAllProspects() {
     setProspectFilter('ALL');
+    onProspectModeChange?.('PROSPECTS');
     setContextMenu(null);
+  }
+
+  function isCaptable(
+    prospect: MapClient,
+    clients: MapClient[],
+    polygon: Feature<Polygon> | null,
+    maxDistanceMeters: number
+  ) {
+    // 1. Debe estar dentro del territorio
+    if (!isInsideTerritory(prospect, polygon)) {
+      return false;
+    }
+
+    const prospectPoint = turf.point([prospect.position[1], prospect.position[0]]);
+
+    // 2. Buscar clientes cercanos
+    const hasNearbyClient = clients.some((client) => {
+      const clientPoint = turf.point([client.position[1], client.position[0]]);
+
+      const distance = turf.distance(prospectPoint, clientPoint, {
+        units: 'meters',
+      });
+
+      return distance <= maxDistanceMeters;
+    });
+
+    // 3. Es captable solo si NO tiene clientes cercanos
+    return !hasNearbyClient;
+  }
+
+  function showCaptables() {
+    setProspectFilter('CAPTABLES');
+    onProspectModeChange?.('CAPTABLES');
+    setContextMenu(null);
+  }
+
+  function isInsideTerritory(prospect: MapClient, polygon: Feature<Polygon> | null) {
+    if (!polygon) return false;
+
+    const point = turf.point([
+      prospect.position[1], // lng
+      prospect.position[0], // lat
+    ]);
+
+    return turf.booleanPointInPolygon(point, polygon);
   }
 
   return (
@@ -271,6 +341,21 @@ export default function MapView({
 
         <ZoomControl position="bottomright" />
       </MapContainer>
+
+      <div ref={sliderRef} className="capture-distance-slider">
+        <div className="capture-distance-value">{captureDistanceMeters}m</div>
+
+        <input
+          type="range"
+          min={10}
+          max={100}
+          step={5}
+          value={captureDistanceMeters}
+          onChange={(e) => setCaptureDistanceMeters(Number(e.target.value))}
+          // orient="vertical"
+        />
+      </div>
+
       {contextMenu?.visible && (
         <div
           className="context-menu"
@@ -309,6 +394,11 @@ export default function MapView({
           <button className="context-menu-item" onClick={showAllProspects}>
             <FiGlobe />
             <span>Prospectos Completos</span>
+          </button>
+
+          <button className="context-menu-item" onClick={showCaptables}>
+            <FiTarget />
+            <span>Captables ({captablesCount})</span>
           </button>
 
           <div className="context-menu-divider" />

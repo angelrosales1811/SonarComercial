@@ -851,6 +851,56 @@ input {
   }
 }
 
+.capture-distance-slider {
+  position: absolute;
+  right: 34px;
+  bottom: 180px;
+  z-index: 1000;
+
+  width: 42px;
+
+  padding: 12px 8px;
+
+  border-radius: 14px;
+
+  background: rgba(15, 23, 42, 0.95);
+
+  backdrop-filter: blur(8px);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+}
+
+.capture-distance-value {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Vertical */
+.capture-distance-slider input[type='range'] {
+  writing-mode: vertical-lr;
+  direction: rtl;
+
+  width: 24px;
+  height: 160px;
+
+  cursor: pointer;
+}
+/* .capture-distance-slider input[type='range'] {
+  appearance: slider-vertical;
+  -webkit-appearance: slider-vertical;
+
+  width: 24px;
+  height: 150px;
+
+  cursor: pointer;
+} */
 /* ==========================================================
    MOBILE
    ========================================================== */

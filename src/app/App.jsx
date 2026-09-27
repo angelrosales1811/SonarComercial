@@ -15,7 +15,7 @@ export default function App() {
   const [polygonClients, setPolygonClients] = useState(null);
   const [prospects, setProspects] = useState([]);
   const [visibleProspects, setVisibleProspects] = useState([]);
-
+  const [prospectMode, setProspectMode] = useState('PROSPECTS');
   const [showExamplesMenu, setShowExamplesMenu] = useState(false);
 
   useEffect(() => {
@@ -67,11 +67,23 @@ export default function App() {
   }
 
   async function loadData(event, setter, generateHull = false) {
+    setProspectMode('PROSPECTS');
+
     const file = event.target.files?.[0];
 
     if (!file) return;
 
     try {
+      if (generateHull) {
+        // Clientes
+        setClients([]);
+        setPolygonClients(null);
+      } else {
+        // Prospectos
+        setProspects([]);
+        setVisibleProspects([]);
+      }
+
       const rows = await importClients(file);
 
       const mappedData = rows.map(mapExcelRow).map(clientToMapClient);
@@ -85,11 +97,12 @@ export default function App() {
           setPolygonClients(hull);
         }
       }
+
+      event.target.value = '';
     } catch (error) {
       console.error(error);
     }
   }
-
   function prospectsVisible() {
     if (!visibleProspects.length) {
       alert('No hay prospectos para exportar');
@@ -182,6 +195,7 @@ export default function App() {
           prospects={prospects}
           polygonClients={polygonClients}
           onVisibleProspectsChange={setVisibleProspects}
+          onProspectModeChange={setProspectMode}
         />
       </section>
 
@@ -244,7 +258,11 @@ export default function App() {
               <span className="step-badge">3</span>
               <button className="btn btn-primary" onClick={prospectsVisible}>
                 <FiDownload />
-                <span>Prospectos ({visibleProspects.length})</span>
+                <span>
+                  {prospectMode === 'CAPTABLES'
+                    ? `Captables (${visibleProspects.length})`
+                    : `Prospectos (${visibleProspects.length})`}
+                </span>
               </button>
             </div>
           )}
