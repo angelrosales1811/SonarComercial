@@ -262,7 +262,7 @@ export default function MapView({
 
   return (
     <>
-      <MapContainer center={[19.0413, -98.2062]} zoom={12} zoomControl={false} className="map">
+      <MapContainer center={[23.634501, -102.552784]} zoom={5} zoomControl={false}>
         <AutoFitBounds clients={clients} />
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

@@ -1,0 +1,70 @@
+.system-page {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(2, 6, 23, 0.75);
+  backdrop-filter: blur(6px);
+
+  z-index: 1000;
+}
+
+.system-page-card {
+  width: min(700px, 90vw);
+
+  padding: 48px;
+
+  text-align: center;
+
+  border-radius: 24px;
+
+  background: rgba(15, 23, 42, 0.95);
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+
+.system-page-image {
+  width: min(330px, 80vw);
+  height: auto;
+
+  display: block;
+  margin: 0 auto 32px;
+}
+
+.system-page-module {
+  display: inline-block;
+
+  margin-bottom: 12px;
+  padding: 6px 14px;
+
+  border-radius: 999px;
+
+  background: rgba(37, 99, 235, 0.15);
+  border: 1px solid rgba(37, 99, 235, 0.3);
+
+  color: #60a5fa;
+
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.system-page-card h1 {
+  margin-bottom: 12px;
+
+  color: white;
+
+  font-size: 36px;
+}
+
+.system-page-card p {
+  color: #94a3b8;
+
+  font-size: 18px;
+}
