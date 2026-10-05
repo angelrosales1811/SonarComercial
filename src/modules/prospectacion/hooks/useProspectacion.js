@@ -1,10 +1,10 @@
 import { useRef, useState } from 'react';
 import * as XLSX from 'xlsx';
 
-import { importClients } from '../../../services/excelImport.service';
-import { mapExcelRow } from '../../../utils/clientMapper';
-import { clientToMapClient } from '../../../utils/clientToMapClient';
-import { generateConvexHull } from '../../../utils/convexHull';
+import { mapExcelRow } from '../mappers/clientMapper';
+import { clientToMapClient } from '../mappers/clientToMapClient';
+import { importClients } from '../services/excelImport.service';
+import { generateConvexHull } from '../utils/convexHull';
 
 export function useProspectacion() {
   const [clients, setClients] = useState([]);

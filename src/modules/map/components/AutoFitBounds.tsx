@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useMap } from 'react-leaflet';
 
-import type { MapClient } from '../../../types/map.types';
+import type { MapClient } from '../../../shared/types/map.types';
 
 interface Props {
   clients: MapClient[];

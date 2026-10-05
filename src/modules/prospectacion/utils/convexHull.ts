@@ -1,6 +1,6 @@
 import * as turf from '@turf/turf';
 import type { Feature, Polygon } from 'geojson';
-import type { MapClient } from '../types/map.types';
+import type { MapClient } from '../../../shared/types/map.types';
 
 export function generateConvexHull(clients: MapClient[]): Feature<Polygon> | null {
   if (clients.length < 3) {

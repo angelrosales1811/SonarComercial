@@ -12,7 +12,7 @@ import {
   TileLayer,
   ZoomControl,
 } from 'react-leaflet';
-import type { MapClient } from '../../../types/map.types';
+import type { MapClient } from '../../../shared/types/map.types';
 import AutoFitBounds from './AutoFitBounds';
 
 interface Props {

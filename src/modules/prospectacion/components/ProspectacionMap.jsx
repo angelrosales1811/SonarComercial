@@ -1,5 +1,5 @@
-import MapView from '../../../features/map/components/MapView';
-
+//import MapView from '../../map/components/MapView';
+import { MapView } from '../../map';
 import { useProspectacionContext } from '../context/ProspectacionContext';
 
 export default function ProspectacionMap() {

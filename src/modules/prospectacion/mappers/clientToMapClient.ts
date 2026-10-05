@@ -1,5 +1,5 @@
+import type { MapClient } from '../../../shared/types/map.types';
 import type { Client } from '../types/client.types';
-import type { MapClient } from '../types/map.types';
 
 export function clientToMapClient(client: Client): MapClient {
   return {
