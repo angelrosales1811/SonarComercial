@@ -357,20 +357,20 @@ export default function MapView({
 
         <ZoomControl position="bottomright" />
       </MapContainer>
+      {prospectFilter === 'CAPTABLES' && captablesCount > 0 && (
+        <div ref={sliderRef} className="capture-distance-slider">
+          <div className="capture-distance-value">{captureDistanceMeters}m</div>
 
-      <div ref={sliderRef} className="capture-distance-slider">
-        <div className="capture-distance-value">{captureDistanceMeters}m</div>
-
-        <input
-          type="range"
-          min={10}
-          max={100}
-          step={5}
-          value={captureDistanceMeters}
-          onChange={(e) => setCaptureDistanceMeters(Number(e.target.value))}
-          // orient="vertical"
-        />
-      </div>
+          <input
+            type="range"
+            min={10}
+            max={100}
+            step={5}
+            value={captureDistanceMeters}
+            onChange={(e) => setCaptureDistanceMeters(Number(e.target.value))}
+          />
+        </div>
+      )}
 
       {contextMenu?.visible && (
         <div
