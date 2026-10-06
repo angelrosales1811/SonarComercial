@@ -1,4 +1,6 @@
+import { saveAs } from 'file-saver';
 import { useReducer } from 'react';
+import * as XLSX from 'xlsx';
 
 import { TerritoriesContext } from './TerritoriesContext';
 
@@ -53,13 +55,6 @@ export function TerritoriesProvider({ children }) {
     });
   };
 
-  // const deletePolygon = (id) => {
-  //   dispatch({
-  //     type: 'DELETE_POLYGON',
-  //     payload: id,
-  //   });
-  // };
-
   const openPolygonModal = () => {
     dispatch({
       type: 'SHOW_POLYGON_MODAL',
@@ -98,6 +93,78 @@ export function TerritoriesProvider({ children }) {
     hideContextMenu();
   };
 
+  const exportPolygonKml = (polygonId) => {
+    const polygon = state.polygons.find((p) => p.id === polygonId);
+
+    if (!polygon) {
+      return;
+    }
+
+    const coordinates = polygon.points.map(([lat, lng]) => `${lng},${lat},0`).join(' ');
+
+    const firstPoint = polygon.points[0];
+
+    const closedCoordinates = coordinates + ` ${firstPoint[1]},${firstPoint[0]},0`;
+
+    const kml = `<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <Placemark>
+      <name>${polygon.name}</name>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              ${closedCoordinates}
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+  </Document>
+</kml>`;
+
+    const blob = new Blob([kml], {
+      type: 'application/vnd.google-earth.kml+xml',
+    });
+
+    saveAs(blob, `${polygon.name}.kml`);
+
+    hideContextMenu();
+  };
+
+  const exportPolygonExcel = (polygonId) => {
+    const polygon = state.polygons.find((p) => p.id === polygonId);
+
+    if (!polygon) {
+      return;
+    }
+
+    const vertices = polygon.points.map(([lat, lng], index) => ({
+      Vertice: index + 1,
+      Latitud: lat,
+      Longitud: lng,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(vertices);
+
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Vertices');
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: 'xlsx',
+      type: 'array',
+    });
+
+    const blob = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    });
+
+    saveAs(blob, `${polygon.name}_vertices.xlsx`);
+
+    hideContextMenu();
+  };
   return (
     <TerritoriesContext.Provider
       value={{
@@ -122,6 +189,10 @@ export function TerritoriesProvider({ children }) {
         showContextMenu,
 
         hideContextMenu,
+
+        exportPolygonKml,
+
+        exportPolygonExcel,
       }}
     >
       {children}

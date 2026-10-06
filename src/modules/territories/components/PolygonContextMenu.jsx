@@ -1,12 +1,14 @@
-import { FiTrash2 } from 'react-icons/fi';
+import { FiDownload, FiMap, FiTrash2 } from 'react-icons/fi';
 import { useTerritoriesContext } from '../context/TerritoriesContext';
 
 export default function PolygonContextMenu() {
-  const { state, hideContextMenu, deletePolygon } = useTerritoriesContext();
-
+  const { state, hideContextMenu, deletePolygon, exportPolygonKml, exportPolygonExcel } =
+    useTerritoriesContext();
   if (!state.contextMenu.visible) {
     return null;
   }
+
+  const polygonId = state.contextMenu.polygonId;
 
   return (
     <>
@@ -19,6 +21,15 @@ export default function PolygonContextMenu() {
           top: state.contextMenu.y,
         }}
       >
+        <button onClick={() => exportPolygonKml(polygonId)}>
+          <FiMap />
+          Descargar KML
+        </button>
+         
+        <button onClick={() => exportPolygonExcel(polygonId)}>
+          <FiDownload />
+          Descargar Excel Vértices
+        </button>
         <button onClick={() => deletePolygon(state.contextMenu.polygonId)}>
           <FiTrash2 />
           Eliminar Polígono
