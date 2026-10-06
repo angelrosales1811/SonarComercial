@@ -14,12 +14,21 @@ import {
 } from 'react-leaflet';
 import type { MapClient } from '../../../shared/types/map.types';
 import AutoFitBounds from './AutoFitBounds';
+import MapClickEvents from './MapClickEvents';
 
 interface Props {
   clients: MapClient[];
+
   prospects: MapClient[];
+
   polygonClients: Feature<Polygon> | null;
+
+  children?: React.ReactNode;
+
+  onMapClick?: (lat: number, lng: number) => void;
+
   onVisibleProspectsChange?: (prospects: MapClient[]) => void;
+
   onProspectModeChange?: (mode: 'PROSPECTS' | 'CAPTABLES') => void;
 }
 
@@ -27,6 +36,11 @@ export default function MapView({
   clients,
   prospects,
   polygonClients,
+
+  children,
+
+  onMapClick,
+
   onVisibleProspectsChange,
   onProspectModeChange,
 }: Props) {
@@ -263,6 +277,7 @@ export default function MapView({
   return (
     <>
       <MapContainer center={[23.634501, -102.552784]} zoom={5} zoomControl={false}>
+        <MapClickEvents onMapClick={onMapClick} />
         <AutoFitBounds clients={clients} />
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -338,6 +353,7 @@ export default function MapView({
             </CircleMarker>
           ))}
         </Pane>
+        {children}
 
         <ZoomControl position="bottomright" />
       </MapContainer>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import MainLayout from '../components/layout/MainLayout';
 import ProspectacionModule from '../modules/prospectacion/ProspectacionModule';
+import TerritoriesModule from '../modules/territories/TerritoriesModule';
 import { ComingSoon, Deprecated, Maintenance, NotFound } from '../system-pages';
 
 export default function App() {
@@ -8,7 +9,7 @@ export default function App() {
 
   const views = {
     map: <ProspectacionModule />,
-    territories: <ComingSoon moduleName="Territorios" />,
+    territories: <TerritoriesModule />,
     reports: <ComingSoon moduleName="Reportes" />,
     coverage: <ComingSoon moduleName="Cobertura" />,
     analytics: <ComingSoon moduleName="Analítica" />,
