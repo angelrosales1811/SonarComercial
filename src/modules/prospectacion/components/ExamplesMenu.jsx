@@ -1,10 +1,13 @@
+import { useRef } from 'react';
 import { FiChevronDown, FiDownload, FiFileText, FiUsers } from 'react-icons/fi';
-//import { downloadTemplate } from '../services/template.service';
 import { useProspectacionContext } from '../context/ProspectacionContext';
+import { ACTIONS } from '../context/reducers/prospectacion.actions';
+import { downloadTemplate } from '../services/template.service';
 
 export default function ExamplesMenu() {
-  const { showExamplesMenu, setShowExamplesMenu, downloadTemplate, menuRef } =
-    useProspectacionContext();
+  const { state, dispatch } = useProspectacionContext();
+  const { showExamplesMenu } = state;
+  const menuRef = useRef(null);
 
   return (
     <div ref={menuRef} className="header-actions" onClick={(e) => e.stopPropagation()}>
@@ -12,7 +15,12 @@ export default function ExamplesMenu() {
         <span className="step-badge">0</span>
         <button
           className="btn format-excel-btn"
-          onClick={() => setShowExamplesMenu(!showExamplesMenu)}
+          onClick={() =>
+            dispatch({
+              type: ACTIONS.SET_SHOW_EXAMPLES_MENU,
+              payload: !showExamplesMenu,
+            })
+          }
         >
           <FiDownload />
           <span>Ejemplos</span>
@@ -27,7 +35,10 @@ export default function ExamplesMenu() {
             className="examples-menu-item"
             onClick={() => {
               downloadTemplate(1);
-              setShowExamplesMenu(false);
+              dispatch({
+                type: ACTIONS.SET_SHOW_EXAMPLES_MENU,
+                payload: false,
+              });
             }}
           >
             <FiUsers />
@@ -38,7 +49,10 @@ export default function ExamplesMenu() {
             className="examples-menu-item"
             onClick={() => {
               downloadTemplate(2);
-              setShowExamplesMenu(false);
+              dispatch({
+                type: ACTIONS.SET_SHOW_EXAMPLES_MENU,
+                payload: false,
+              });
             }}
           >
             <FiFileText />

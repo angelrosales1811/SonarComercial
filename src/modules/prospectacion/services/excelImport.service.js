@@ -1,6 +1,6 @@
 import * as XLSX from 'xlsx';
 
-export async function importClients(file: File) {
+export async function importClients(file) {
   const buffer = await file.arrayBuffer();
 
   const workbook = XLSX.read(buffer, {

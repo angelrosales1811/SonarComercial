@@ -90,7 +90,7 @@ export default function MapView({
 
   useEffect(() => {
     onVisibleProspectsChange?.(visibleProspects);
-  }, [visibleProspects, onVisibleProspectsChange]);
+  }, [visibleProspects]);
 
   function showPolygonContextMenu(event: any) {
     const originalEvent = event.originalEvent;
@@ -308,11 +308,11 @@ export default function MapView({
 
                   <br />
 
-                  {client.attributes.c1}
+                  {client.attributes?.c1}
 
                   <br />
 
-                  {client.attributes.c2}
+                  {client.attributes?.c2}
                 </Popup>
               </CircleMarker>
             ))}

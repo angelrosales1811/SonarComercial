@@ -2,15 +2,10 @@ import { FiDownload, FiTrash2, FiUpload } from 'react-icons/fi';
 import { useProspectacionContext } from '../context/ProspectacionContext';
 
 export default function ProspectionConsole() {
-  const {
-    setClients,
-    setProspects,
-    visibleProspects,
-    prospectMode,
-    loadData,
-    clearMap,
-    exportVisibleProspects,
-  } = useProspectacionContext();
+  const { state, loadClients, loadProspects, clearMap, exportVisibleProspects } =
+    useProspectacionContext();
+
+  const { visibleProspects, prospectMode } = state;
 
   return (
     <footer className="bottom-console">
@@ -28,7 +23,7 @@ export default function ProspectionConsole() {
         type="file"
         accept=".xlsx,.xls"
         className="file-input"
-        onChange={(e) => loadData(e, setClients, true)}
+        onChange={loadClients}
       />
 
       <button className="btn btn-secondary" onClick={clearMap}>
@@ -50,7 +45,7 @@ export default function ProspectionConsole() {
           type="file"
           accept=".xlsx,.xls"
           className="file-input"
-          onChange={(e) => loadData(e, setProspects, false)}
+          onChange={loadProspects}
         />
 
         {visibleProspects?.length > 0 && (

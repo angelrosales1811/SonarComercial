@@ -7,12 +7,11 @@ export function generateConvexHull(clients: MapClient[]): Feature<Polygon> | nul
     return null;
   }
 
-  const points = clients.map((client) =>
-    turf.point([
-      client.position[1], // lng
-      client.position[0], // lat
-    ])
+  const validClients = clients.filter(
+    (client) => Array.isArray(client.position) && client.position.length === 2
   );
+
+  const points = validClients.map((client) => turf.point([client.position[1], client.position[0]]));
 
   const collection = turf.featureCollection(points);
 
