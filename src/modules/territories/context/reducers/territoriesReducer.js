@@ -80,6 +80,28 @@ export function territoriesReducer(state, action) {
         polygons: state.polygons.filter((polygon) => polygon.id !== action.payload),
       };
 
+    case 'SHOW_CONTEXT_MENU':
+      return {
+        ...state,
+        contextMenu: {
+          visible: true,
+          x: action.payload.x,
+          y: action.payload.y,
+          polygonId: action.payload.polygonId,
+        },
+      };
+
+    case 'HIDE_CONTEXT_MENU':
+      return {
+        ...state,
+        contextMenu: {
+          visible: false,
+          x: 0,
+          y: 0,
+          polygonId: null,
+        },
+      };
+
     default:
       return state;
   }

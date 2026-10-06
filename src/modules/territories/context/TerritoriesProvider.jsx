@@ -53,12 +53,12 @@ export function TerritoriesProvider({ children }) {
     });
   };
 
-  const deletePolygon = (id) => {
-    dispatch({
-      type: 'DELETE_POLYGON',
-      payload: id,
-    });
-  };
+  // const deletePolygon = (id) => {
+  //   dispatch({
+  //     type: 'DELETE_POLYGON',
+  //     payload: id,
+  //   });
+  // };
 
   const openPolygonModal = () => {
     dispatch({
@@ -70,6 +70,32 @@ export function TerritoriesProvider({ children }) {
     dispatch({
       type: 'HIDE_POLYGON_MODAL',
     });
+  };
+
+  const showContextMenu = (event, polygonId) => {
+    dispatch({
+      type: 'SHOW_CONTEXT_MENU',
+      payload: {
+        x: event.originalEvent.clientX,
+        y: event.originalEvent.clientY,
+        polygonId,
+      },
+    });
+  };
+
+  const hideContextMenu = () => {
+    dispatch({
+      type: 'HIDE_CONTEXT_MENU',
+    });
+  };
+
+  const deletePolygon = (polygonId) => {
+    dispatch({
+      type: 'DELETE_POLYGON',
+      payload: polygonId,
+    });
+
+    hideContextMenu();
   };
 
   return (
@@ -92,6 +118,10 @@ export function TerritoriesProvider({ children }) {
         openPolygonModal,
 
         closePolygonModal,
+
+        showContextMenu,
+
+        hideContextMenu,
       }}
     >
       {children}

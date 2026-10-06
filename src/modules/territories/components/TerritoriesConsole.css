@@ -155,3 +155,54 @@
 .territories-map-drawing .leaflet-interactive {
   cursor: crosshair !important;
 }
+
+.polygon-context-menu {
+  position: fixed;
+  z-index: 99999;
+
+  min-width: 220px;
+
+  background: rgba(12, 20, 38, 0.98);
+
+  border: 1px solid rgba(0, 132, 255, 0.35);
+
+  border-radius: 14px;
+
+  overflow: hidden;
+
+  backdrop-filter: blur(12px);
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.35),
+    0 0 20px rgba(0, 132, 255, 0.15);
+}
+
+.polygon-context-menu button {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 14px 16px;
+
+  border: none;
+
+  background: transparent;
+
+  color: white;
+
+  cursor: pointer;
+
+  font-size: 14px;
+}
+
+.polygon-context-menu button:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.context-menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99998;
+}

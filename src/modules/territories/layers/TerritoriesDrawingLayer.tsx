@@ -1,4 +1,6 @@
 import { CircleMarker, Pane, Polygon, Polyline } from 'react-leaflet';
+// @ts-ignore
+import { useTerritoriesContext } from '../context/TerritoriesContext';
 
 interface Props {
   polygons?: any[];
@@ -6,6 +8,7 @@ interface Props {
 }
 
 export default function TerritoriesDrawingLayer({ polygons = [], activePolygon = null }: Props) {
+  const { showContextMenu } = useTerritoriesContext();
   return (
     <Pane name="territories" style={{ zIndex: 400 }}>
       {polygons.map((polygon) => (
@@ -16,6 +19,11 @@ export default function TerritoriesDrawingLayer({ polygons = [], activePolygon =
             color: polygon.color,
             fillColor: polygon.color,
             fillOpacity: 0.3,
+          }}
+          eventHandlers={{
+            contextmenu: (e) => {
+              showContextMenu(e, polygon.id);
+            },
           }}
         />
       ))}

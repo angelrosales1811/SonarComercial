@@ -10,6 +10,8 @@ import { TerritoriesProvider } from './context/TerritoriesProvider';
 
 import { useTerritoriesContext } from './context/TerritoriesContext';
 
+import PolygonContextMenu from './components/PolygonContextMenu';
+
 import './components/TerritoriesConsole.css';
 function TerritoriesScreen() {
   const { state, addPoint, createPolygon, closePolygonModal } = useTerritoriesContext();
@@ -23,6 +25,8 @@ function TerritoriesScreen() {
       }}
     >
       <TerritoriesConsole />
+
+      <PolygonContextMenu />
 
       <PolygonModal
         isOpen={state.showPolygonModal}
