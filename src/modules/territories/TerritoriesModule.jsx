@@ -9,9 +9,11 @@ import TerritoriesDrawingLayer from './layers/TerritoriesDrawingLayer';
 import { TerritoriesProvider } from './context/TerritoriesProvider';
 
 import { useTerritoriesContext } from './context/TerritoriesContext';
+
+import './components/TerritoriesConsole.css';
 function TerritoriesScreen() {
   const { state, addPoint, createPolygon, closePolygonModal } = useTerritoriesContext();
-  console.log(useTerritoriesContext());
+
   return (
     <div
       style={{
@@ -27,10 +29,11 @@ function TerritoriesScreen() {
         onClose={closePolygonModal}
         onSave={createPolygon}
       />
-
-      <MapView clients={[]} prospects={[]} polygonClients={null} onMapClick={addPoint}>
-        <TerritoriesDrawingLayer polygons={state.polygons} activePolygon={state.activePolygon} />
-      </MapView>
+      <div className={`territories-map ${state.isDrawing ? 'territories-map-drawing' : ''}`}>
+        <MapView clients={[]} prospects={[]} polygonClients={null} onMapClick={addPoint}>
+          <TerritoriesDrawingLayer polygons={state.polygons} activePolygon={state.activePolygon} />
+        </MapView>
+      </div>
     </div>
   );
 }

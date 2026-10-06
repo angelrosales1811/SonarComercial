@@ -1,66 +1,157 @@
-.territories-console {
-  position: absolute;
-
-  top: 20px;
-  left: 20px;
-
-  z-index: 2000;
+.polygon-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
 
   display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
 
-  padding: 12px;
-
-  background: rgba(255, 255, 255, 0.95);
-
-  border-radius: 12px;
-
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
 }
 
-.territories-console button {
-  border: none;
+.polygon-modal {
+  width: 500px;
+  max-width: 90vw;
 
-  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(8, 15, 32, 0.98), rgba(15, 23, 42, 0.98));
 
-  padding: 10px 14px;
+  border: 1px solid rgba(59, 130, 246, 0.35);
 
-  font-size: 14px;
+  border-radius: 20px;
 
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.45),
+    0 0 25px rgba(37, 99, 235, 0.15);
+
+  overflow: hidden;
+}
+
+.polygon-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 20px 24px;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.polygon-modal-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin: 0;
+
+  color: #ffffff;
+  font-size: 1.1rem;
   font-weight: 600;
+}
+
+.polygon-modal-close {
+  width: 36px;
+  height: 36px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
 
   cursor: pointer;
 
-  background: #0066ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: 0.2s;
+}
+
+.polygon-modal-close:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.polygon-modal-body {
+  padding: 24px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.polygon-modal-body label {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.polygon-modal-body input[type='text'] {
+  width: 100%;
+
+  height: 48px;
+
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  background: rgba(255, 255, 255, 0.05);
+
   color: white;
 
-  transition: all 0.2s ease;
+  padding: 0 14px;
+
+  outline: none;
+  transition: 0.2s;
 }
 
-.territories-console button:hover {
-  background: #0052cc;
+.polygon-modal-body input[type='text']:focus {
+  border-color: #3b82f6;
+
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
 
-.territories-console button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.color-picker-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 99999;
+.color-picker-wrapper input[type='color'] {
+  width: 70px;
+  height: 40px;
+
+  border: none;
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  background: transparent;
 }
 
-.modal-card {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.color-picker-wrapper span {
+  color: white;
+  font-weight: 600;
+}
 
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
+.polygon-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+
+  padding: 20px 24px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.territories-map {
+  width: 100%;
+  height: 100%;
+}
+
+.territories-map-drawing .leaflet-container {
+  cursor: crosshair !important;
+}
+
+.territories-map-drawing .leaflet-interactive {
+  cursor: crosshair !important;
 }

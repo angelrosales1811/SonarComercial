@@ -888,6 +888,13 @@ input {
   z-index: var(--z-console);
 }
 
+.drawing-mode {
+  cursor: crosshair;
+}
+  .drawing-mode .leaflet-container {
+  cursor: crosshair !important;
+}
+
 /* ==========================================================
    MOBILE
    ========================================================== */

@@ -1,4 +1,4 @@
-import { Marker, Pane, Polygon, Polyline } from 'react-leaflet';
+import { CircleMarker, Pane, Polygon, Polyline } from 'react-leaflet';
 
 interface Props {
   polygons?: any[];
@@ -25,7 +25,17 @@ export default function TerritoriesDrawingLayer({ polygons = [], activePolygon =
       )}
 
       {activePolygon?.points?.map((point: any, index: number) => (
-        <Marker key={index} position={point} />
+        <CircleMarker
+          key={index}
+          center={point}
+          radius={6}
+          pathOptions={{
+            color: '#fff',
+            weight: 2,
+            fillColor: activePolygon.color,
+            fillOpacity: 1,
+          }}
+        />
       ))}
     </Pane>
   );

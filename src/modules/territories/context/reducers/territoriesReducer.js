@@ -13,7 +13,6 @@ export function territoriesReducer(state, action) {
       };
 
     case 'START_POLYGON':
-      console.log('START_POLYGON');
       return {
         ...state,
         showPolygonModal: false,

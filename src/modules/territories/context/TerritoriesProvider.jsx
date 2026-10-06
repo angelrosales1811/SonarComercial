@@ -10,11 +10,6 @@ export function TerritoriesProvider({ children }) {
   const [state, dispatch] = useReducer(territoriesReducer, territoriesInitialState);
 
   const createPolygon = ({ name, color }) => {
-    console.log('CREATE POLYGON', {
-      name,
-      color,
-    });
-
     dispatch({
       type: 'START_POLYGON',
 
@@ -26,8 +21,6 @@ export function TerritoriesProvider({ children }) {
   };
 
   const addPoint = (lat, lng) => {
-    console.log('ADD POINT', lat, lng);
-
     if (!state.isDrawing) {
       return;
     }
@@ -68,7 +61,6 @@ export function TerritoriesProvider({ children }) {
   };
 
   const openPolygonModal = () => {
-    console.log('OPEN MODAL');
     dispatch({
       type: 'SHOW_POLYGON_MODAL',
     });
