@@ -102,6 +102,201 @@ export function territoriesReducer(state, action) {
         },
       };
 
+    case 'START_EDIT_POLYGON': {
+      const polygon = state.polygons.find((p) => p.id === action.payload);
+
+      if (!polygon) {
+        return state;
+      }
+
+      return {
+        ...state,
+
+        editingPolygonId: polygon.id,
+
+        editingBackup: structuredClone(polygon),
+
+        editingPolygon: {
+          ...structuredClone(polygon),
+
+          id: crypto.randomUUID(),
+        },
+
+        polygons: state.polygons.filter((p) => p.id !== polygon.id),
+      };
+    }
+
+    case 'STOP_EDIT_POLYGON':
+      return {
+        ...state,
+
+        editingPolygonId: null,
+        editingPolygon: null,
+        editingBackup: null,
+
+        isDrawing: false,
+        activePolygon: null,
+      };
+
+    case 'MOVE_VERTEX': {
+      const points = [...state.editingPolygon.points];
+
+      points[action.payload.vertexIndex] = [action.payload.lat, action.payload.lng];
+
+      return {
+        ...state,
+
+        editingPolygon: {
+          ...state.editingPolygon,
+          points,
+        },
+      };
+    }
+
+    case 'DELETE_VERTEX':
+      return {
+        ...state,
+
+        editingPolygon: {
+          ...state.editingPolygon,
+
+          points: state.editingPolygon.points.filter(
+            (_, index) => index !== action.payload.vertexIndex
+          ),
+        },
+      };
+
+    case 'INSERT_VERTEX': {
+      const points = [...state.editingPolygon.points];
+
+      points.splice(action.payload.insertIndex, 0, [action.payload.lat, action.payload.lng]);
+
+      return {
+        ...state,
+
+        editingPolygon: {
+          ...state.editingPolygon,
+          points,
+        },
+      };
+    }
+
+    case 'CREATE_POLYGON_COPY':
+      return {
+        ...state,
+
+        polygons: [
+          ...state.polygons,
+
+          {
+            ...action.payload,
+
+            id: crypto.randomUUID(),
+
+            name: `${action.payload.name} (Copia)`,
+          },
+        ],
+      };
+
+    // case 'RESTORE_EDIT_POLYGON':
+    //   return {
+    //     ...state,
+
+    //     polygons: state.polygons.map((polygon) => {
+    //       if (polygon.id !== state.editingBackup?.id) {
+    //         return polygon;
+    //       }
+
+    //       return structuredClone(state.editingBackup);
+    //     }),
+
+    //     editingPolygonId: null,
+
+    //     editingBackup: null,
+    //   };
+
+    // case 'SAVE_POLYGON_COPY': {
+    //   const polygon = state.polygons.find((p) => p.id === state.editingPolygonId);
+
+    //   if (!polygon) {
+    //     return state;
+    //   }
+
+    //   return {
+    //     ...state,
+
+    //     polygons: [
+    //       ...state.polygons,
+
+    //       {
+    //         ...structuredClone(polygon),
+
+    //         id: crypto.randomUUID(),
+
+    //         name: `${polygon.name} (Copia)`,
+    //       },
+    //     ],
+
+    //     editingPolygonId: null,
+
+    //     editingBackup: null,
+    //   };
+    // }
+
+    case 'SAVE_EDITED_POLYGON':
+      return {
+        ...state,
+
+        polygons: [...state.polygons, structuredClone(state.editingPolygon)],
+
+        editingPolygon: null,
+        editingBackup: null,
+        editingPolygonId: null,
+
+        isDrawing: false,
+        activePolygon: null,
+      };
+
+    case 'SAVE_POLYGON_COPY':
+      return {
+        ...state,
+
+        polygons: [
+          ...state.polygons,
+
+          structuredClone(state.editingBackup),
+
+          {
+            ...structuredClone(state.editingPolygon),
+
+            id: crypto.randomUUID(),
+
+            name: state.editingPolygon.name + ' (Copia)',
+          },
+        ],
+
+        editingPolygon: null,
+        editingBackup: null,
+        editingPolygonId: null,
+
+        isDrawing: false,
+        activePolygon: null,
+      };
+
+    case 'CANCEL_EDIT_POLYGON':
+      return {
+        ...state,
+
+        polygons: [...state.polygons, structuredClone(state.editingBackup)],
+
+        editingPolygon: null,
+        editingBackup: null,
+        editingPolygonId: null,
+
+        isDrawing: false,
+        activePolygon: null,
+      };
+
     default:
       return state;
   }

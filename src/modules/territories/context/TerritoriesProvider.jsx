@@ -165,6 +165,93 @@ export function TerritoriesProvider({ children }) {
 
     hideContextMenu();
   };
+
+  const startEditPolygon = (polygonId) => {
+    dispatch({
+      type: 'START_EDIT_POLYGON',
+      payload: polygonId,
+    });
+
+    hideContextMenu();
+  };
+
+  const stopEditPolygon = () => {
+    dispatch({
+      type: 'STOP_EDIT_POLYGON',
+    });
+  };
+
+  const moveVertex = (polygonId, vertexIndex, lat, lng) => {
+    dispatch({
+      type: 'MOVE_VERTEX',
+      payload: {
+        polygonId,
+        vertexIndex,
+        lat,
+        lng,
+      },
+    });
+  };
+
+  const deleteVertex = (polygonId, vertexIndex) => {
+    dispatch({
+      type: 'DELETE_VERTEX',
+      payload: {
+        polygonId,
+        vertexIndex,
+      },
+    });
+  };
+
+  const insertVertex = (polygonId, insertIndex, lat, lng) => {
+    dispatch({
+      type: 'INSERT_VERTEX',
+      payload: {
+        polygonId,
+        insertIndex,
+        lat,
+        lng,
+      },
+    });
+  };
+
+  // const savePolygonCopy = () => {
+  //   const polygon = state.polygons.find((p) => p.id === state.editingPolygonId);
+
+  //   if (!polygon) {
+  //     return;
+  //   }
+
+  //   dispatch({
+  //     type: 'CREATE_POLYGON_COPY',
+  //     payload: polygon,
+  //   });
+
+  //   dispatch({
+  //     type: 'STOP_EDIT_POLYGON',
+  //   });
+  // };
+
+  const saveEditedPolygon = () => {
+    dispatch({
+      type: 'SAVE_EDITED_POLYGON',
+    });
+  };
+
+  const cancelEditPolygon = () => {
+    console.log('CANCELAR EDICION');
+
+    dispatch({
+      type: 'CANCEL_EDIT_POLYGON',
+    });
+  };
+
+  const savePolygonCopy = () => {
+    dispatch({
+      type: 'SAVE_POLYGON_COPY',
+    });
+  };
+
   return (
     <TerritoriesContext.Provider
       value={{
@@ -191,8 +278,18 @@ export function TerritoriesProvider({ children }) {
         hideContextMenu,
 
         exportPolygonKml,
-
         exportPolygonExcel,
+
+        startEditPolygon,
+        stopEditPolygon,
+
+        saveEditedPolygon,
+        savePolygonCopy,
+        cancelEditPolygon,
+
+        moveVertex,
+        deleteVertex,
+        insertVertex,
       }}
     >
       {children}

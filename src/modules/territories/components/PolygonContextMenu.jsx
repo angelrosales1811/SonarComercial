@@ -1,9 +1,15 @@
-import { FiDownload, FiMap, FiTrash2 } from 'react-icons/fi';
+import { FiDownload, FiEdit, FiMap, FiTrash2 } from 'react-icons/fi';
 import { useTerritoriesContext } from '../context/TerritoriesContext';
 
 export default function PolygonContextMenu() {
-  const { state, hideContextMenu, deletePolygon, exportPolygonKml, exportPolygonExcel } =
-    useTerritoriesContext();
+  const {
+    state,
+    hideContextMenu,
+    deletePolygon,
+    exportPolygonKml,
+    exportPolygonExcel,
+    startEditPolygon,
+  } = useTerritoriesContext();
   if (!state.contextMenu.visible) {
     return null;
   }
@@ -21,6 +27,10 @@ export default function PolygonContextMenu() {
           top: state.contextMenu.y,
         }}
       >
+        <button onClick={() => startEditPolygon(polygonId)}>
+          <FiEdit />
+          Editar
+        </button>
         <button onClick={() => exportPolygonKml(polygonId)}>
           <FiMap />
           Descargar KML

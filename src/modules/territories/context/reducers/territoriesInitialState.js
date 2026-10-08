@@ -4,6 +4,14 @@ export const territoriesInitialState = {
   isDrawing: false,
   showPolygonModal: false,
 
+  polygonModal: {
+    visible: false,
+  },
+
+  editingPolygonId: null,
+  editingPolygon: null,
+  editingBackup: null,
+
   contextMenu: {
     visible: false,
     x: 0,

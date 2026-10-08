@@ -6,6 +6,8 @@ import TerritoriesConsole from './components/TerritoriesConsole';
 
 import TerritoriesDrawingLayer from './layers/TerritoriesDrawingLayer';
 
+import TerritoriesEditingLayer from './layers/TerritoriesEditingLayer';
+
 import { TerritoriesProvider } from './context/TerritoriesProvider';
 
 import { useTerritoriesContext } from './context/TerritoriesContext';
@@ -36,6 +38,8 @@ function TerritoriesScreen() {
       <div className={`territories-map ${state.isDrawing ? 'territories-map-drawing' : ''}`}>
         <MapView clients={[]} prospects={[]} polygonClients={null} onMapClick={addPoint}>
           <TerritoriesDrawingLayer polygons={state.polygons} activePolygon={state.activePolygon} />
+
+          <TerritoriesEditingLayer />
         </MapView>
       </div>
     </div>

@@ -451,7 +451,7 @@ input {
 
   overflow: hidden;
 
-  border: none;
+  /* border: none; */
 
   border-radius: var(--radius-md);
 
