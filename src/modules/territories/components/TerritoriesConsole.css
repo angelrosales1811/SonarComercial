@@ -215,7 +215,7 @@
 }
 
 .console-content .btn {
-  min-width: 160px;
+  min-width: auto;
 }
 
 .btn-success {

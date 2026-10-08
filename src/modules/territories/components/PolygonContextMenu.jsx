@@ -14,6 +14,14 @@ export default function PolygonContextMenu() {
     return null;
   }
 
+  // Ocultar completamente durante edición
+  if (state.isEditing) {
+    return null;
+  }
+  if (!state.contextMenu.visible) {
+    return null;
+  }
+
   const polygonId = state.contextMenu.polygonId;
 
   return (

@@ -68,6 +68,9 @@ export function TerritoriesProvider({ children }) {
   };
 
   const showContextMenu = (event, polygonId) => {
+    if (state.editingPolygonId) {
+      return;
+    }
     dispatch({
       type: 'SHOW_CONTEXT_MENU',
       payload: {
@@ -239,8 +242,6 @@ export function TerritoriesProvider({ children }) {
   };
 
   const cancelEditPolygon = () => {
-    console.log('CANCELAR EDICION');
-
     dispatch({
       type: 'CANCEL_EDIT_POLYGON',
     });

@@ -1,12 +1,38 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FiX } from 'react-icons/fi';
 import { PiPolygon } from 'react-icons/pi';
 
 export default function PolygonModal({ isOpen, onClose, onSave }) {
   const [name, setName] = useState('');
-  const [color, setColor] = useState('#2196f3');
+  const [color, setColor] = useState('');
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (!isOpen) return;
+    setName(generateRandomName());
+    setColor(generateRandomColor());
+  }, [isOpen]);
+  if (!isOpen) {
+    return null;
+  }
+
+  const TERRITORY_COLORS = [
+    '#2196f3',
+    '#00bcd4',
+    '#4caf50',
+    '#8bc34a',
+    '#ffc107',
+    '#ff9800',
+    '#f44336',
+    '#e91e63',
+    '#9c27b0',
+    '#673ab7',
+  ];
+
+  function generateRandomColor() {
+    const randomIndex = Math.floor(Math.random() * TERRITORY_COLORS.length);
+
+    return TERRITORY_COLORS[randomIndex];
+  }
 
   const handleSave = () => {
     if (!name.trim()) {
@@ -18,9 +44,17 @@ export default function PolygonModal({ isOpen, onClose, onSave }) {
       color,
     });
 
-    setName('');
-    setColor('#2196f3');
+    setName(generateRandomName());
+    setColor(generateRandomColor());
   };
+
+  function generateRandomName() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ123456789';
+
+    return Array.from({ length: 8 }, () => chars[Math.floor(Math.random() * chars.length)]).join(
+      ''
+    );
+  }
 
   return (
     <div className="polygon-modal-backdrop">

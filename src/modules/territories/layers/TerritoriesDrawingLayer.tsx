@@ -8,7 +8,7 @@ interface Props {
 }
 
 export default function TerritoriesDrawingLayer({ polygons = [], activePolygon = null }: Props) {
-  const { showContextMenu } = useTerritoriesContext();
+  const { state, showContextMenu } = useTerritoriesContext();
   return (
     <Pane name="territories" style={{ zIndex: 400 }}>
       {polygons.map((polygon) => (
@@ -22,6 +22,12 @@ export default function TerritoriesDrawingLayer({ polygons = [], activePolygon =
           }}
           eventHandlers={{
             contextmenu: (e) => {
+              if (state.editingPolygonId) {
+                e.originalEvent?.preventDefault();
+                e.originalEvent?.stopPropagation();
+                return;
+              }
+
               showContextMenu(e, polygon.id);
             },
           }}

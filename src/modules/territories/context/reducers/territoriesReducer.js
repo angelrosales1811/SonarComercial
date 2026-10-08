@@ -113,6 +113,12 @@ export function territoriesReducer(state, action) {
         ...state,
 
         editingPolygonId: polygon.id,
+        contextMenu: {
+          visible: false,
+          x: 0,
+          y: 0,
+          polygonId: null,
+        },
 
         editingBackup: structuredClone(polygon),
 
