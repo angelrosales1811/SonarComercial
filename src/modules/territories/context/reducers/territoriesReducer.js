@@ -279,19 +279,6 @@ export function territoriesReducer(state, action) {
         activePolygon: null,
       };
 
-    // case 'BRING_POLYGON_TO_FRONT': {
-    //   const polygon = state.polygons.find((p) => p.id === action.payload);
-
-    //   if (!polygon) {
-    //     return state;
-    //   }
-
-    //   return {
-    //     ...state,
-    //     polygons: [...state.polygons.filter((p) => p.id !== polygon.id), polygon],
-    //   };
-    // }
-
     case 'SELECT_POLYGON':
       return {
         ...state,
@@ -324,6 +311,13 @@ export function territoriesReducer(state, action) {
           mode: 'create',
           polygonId: null,
         },
+      };
+
+    case 'IMPORT_POLYGONS':
+      return {
+        ...state,
+
+        polygons: [...state.polygons, ...action.payload],
       };
 
     default:

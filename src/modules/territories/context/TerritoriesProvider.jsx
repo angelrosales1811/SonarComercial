@@ -1,4 +1,6 @@
 import { saveAs } from 'file-saver';
+import { parseKml } from '../services/kmlService';
+
 import { useReducer } from 'react';
 import * as XLSX from 'xlsx';
 
@@ -100,6 +102,37 @@ export function TerritoriesProvider({ children }) {
     hideContextMenu();
   };
 
+  const buildPolygonKml = (polygon) => {
+    const coordinates = polygon.points.map(([lat, lng]) => `${lng},${lat},0`).join(' ');
+
+    const firstPoint = polygon.points[0];
+
+    const closedCoordinates = coordinates + ` ${firstPoint[1]},${firstPoint[0]},0`;
+
+    return `
+      <Placemark>
+        <name>${polygon.name}</name>
+        <Style>
+          <LineStyle>
+            <color>${polygon.color?.replace('#', 'ff') || 'ff0000ff'}</color>
+          </LineStyle>
+          <PolyStyle>
+            <color>${polygon.color?.replace('#', '7f') || '7f0000ff'}</color>
+          </PolyStyle>
+        </Style>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <coordinates>
+                ${closedCoordinates}
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    `;
+  };
+
   const exportPolygonKml = (polygonId) => {
     const polygon = state.polygons.find((p) => p.id === polygonId);
 
@@ -107,29 +140,12 @@ export function TerritoriesProvider({ children }) {
       return;
     }
 
-    const coordinates = polygon.points.map(([lat, lng]) => `${lng},${lat},0`).join(' ');
-
-    const firstPoint = polygon.points[0];
-
-    const closedCoordinates = coordinates + ` ${firstPoint[1]},${firstPoint[0]},0`;
-
     const kml = `<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2">
-  <Document>
-    <Placemark>
-      <name>${polygon.name}</name>
-      <Polygon>
-        <outerBoundaryIs>
-          <LinearRing>
-            <coordinates>
-              ${closedCoordinates}
-            </coordinates>
-          </LinearRing>
-        </outerBoundaryIs>
-      </Polygon>
-    </Placemark>
-  </Document>
-</kml>`;
+      <kml xmlns="http://www.opengis.net/kml/2.2">
+        <Document>
+          ${buildPolygonKml(polygon)}
+        </Document>
+      </kml>`;
 
     const blob = new Blob([kml], {
       type: 'application/vnd.google-earth.kml+xml',
@@ -138,6 +154,55 @@ export function TerritoriesProvider({ children }) {
     saveAs(blob, `${polygon.name}.kml`);
 
     hideContextMenu();
+  };
+
+  const exportAllPolygonsKml = () => {
+    if (!state.polygons.length) {
+      return;
+    }
+
+    const placemarks = state.polygons.map((polygon) => buildPolygonKml(polygon)).join('\n');
+
+    const kml = `<?xml version="1.0" encoding="UTF-8"?>
+      <kml xmlns="http://www.opengis.net/kml/2.2">
+        <Document>
+          <name>Territorios</name>
+          ${placemarks}
+        </Document>
+      </kml>`;
+
+    const blob = new Blob([kml], {
+      type: 'application/vnd.google-earth.kml+xml',
+    });
+
+    saveAs(blob, `Poligonos_${state.polygons.length}.kml`);
+  };
+
+  const importPolygonsKml = (file) => {
+    if (!file) {
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      try {
+        const polygons = parseKml(event.target.result);
+
+        if (!polygons.length) {
+          return;
+        }
+
+        dispatch({
+          type: 'IMPORT_POLYGONS',
+          payload: polygons,
+        });
+      } catch (error) {
+        console.error('Error importando KML', error);
+      }
+    };
+
+    reader.readAsText(file);
   };
 
   const exportPolygonExcel = (polygonId) => {
@@ -240,12 +305,12 @@ export function TerritoriesProvider({ children }) {
     });
   };
 
-  const bringPolygonToFront = (polygonId) => {
-    dispatch({
-      type: 'BRING_POLYGON_TO_FRONT',
-      payload: polygonId,
-    });
-  };
+  // const bringPolygonToFront = (polygonId) => {
+  //   dispatch({
+  //     type: 'BRING_POLYGON_TO_FRONT',
+  //     payload: polygonId,
+  //   });
+  // };
 
   const selectPolygon = (polygonId) => {
     dispatch({
@@ -310,6 +375,8 @@ export function TerritoriesProvider({ children }) {
         hideContextMenu,
 
         exportPolygonKml,
+        exportAllPolygonsKml,
+        importPolygonsKml,
         exportPolygonExcel,
 
         startEditPolygon,
