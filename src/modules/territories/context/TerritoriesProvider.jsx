@@ -218,23 +218,6 @@ export function TerritoriesProvider({ children }) {
     });
   };
 
-  // const savePolygonCopy = () => {
-  //   const polygon = state.polygons.find((p) => p.id === state.editingPolygonId);
-
-  //   if (!polygon) {
-  //     return;
-  //   }
-
-  //   dispatch({
-  //     type: 'CREATE_POLYGON_COPY',
-  //     payload: polygon,
-  //   });
-
-  //   dispatch({
-  //     type: 'STOP_EDIT_POLYGON',
-  //   });
-  // };
-
   const saveEditedPolygon = () => {
     dispatch({
       type: 'SAVE_EDITED_POLYGON',
@@ -250,6 +233,27 @@ export function TerritoriesProvider({ children }) {
   const savePolygonCopy = () => {
     dispatch({
       type: 'SAVE_POLYGON_COPY',
+    });
+  };
+
+  const bringPolygonToFront = (polygonId) => {
+    dispatch({
+      type: 'BRING_POLYGON_TO_FRONT',
+      payload: polygonId,
+    });
+  };
+
+  const selectPolygon = (polygonId) => {
+    dispatch({
+      type: 'SELECT_POLYGON',
+      payload: polygonId,
+    });
+  };
+
+  const movePolygonToTop = (polygonId) => {
+    dispatch({
+      type: 'MOVE_POLYGON_TO_TOP',
+      payload: polygonId,
     });
   };
 
@@ -291,6 +295,10 @@ export function TerritoriesProvider({ children }) {
         moveVertex,
         deleteVertex,
         insertVertex,
+
+        // bringPolygonToFront,
+        selectPolygon,
+        movePolygonToTop,
       }}
     >
       {children}

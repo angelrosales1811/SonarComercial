@@ -49,22 +49,23 @@ export function territoriesReducer(state, action) {
         },
       };
 
-    case 'CLOSE_POLYGON':
+    case 'CLOSE_POLYGON': {
+      const polygon = {
+        ...state.activePolygon,
+        closed: true,
+      };
+
       return {
         ...state,
 
-        polygons: [
-          ...state.polygons,
-          {
-            ...state.activePolygon,
-            closed: true,
-          },
-        ],
+        polygons: [...state.polygons, polygon],
 
-        isDrawing: false,
+        topPolygonId: polygon.id,
 
         activePolygon: null,
+        isDrawing: false,
       };
+    }
 
     case 'DELETE_CURRENT_POLYGON':
       return {
@@ -204,64 +205,24 @@ export function territoriesReducer(state, action) {
         ],
       };
 
-    // case 'RESTORE_EDIT_POLYGON':
-    //   return {
-    //     ...state,
+    case 'SAVE_EDITED_POLYGON': {
+      const polygon = structuredClone(state.editingPolygon);
 
-    //     polygons: state.polygons.map((polygon) => {
-    //       if (polygon.id !== state.editingBackup?.id) {
-    //         return polygon;
-    //       }
-
-    //       return structuredClone(state.editingBackup);
-    //     }),
-
-    //     editingPolygonId: null,
-
-    //     editingBackup: null,
-    //   };
-
-    // case 'SAVE_POLYGON_COPY': {
-    //   const polygon = state.polygons.find((p) => p.id === state.editingPolygonId);
-
-    //   if (!polygon) {
-    //     return state;
-    //   }
-
-    //   return {
-    //     ...state,
-
-    //     polygons: [
-    //       ...state.polygons,
-
-    //       {
-    //         ...structuredClone(polygon),
-
-    //         id: crypto.randomUUID(),
-
-    //         name: `${polygon.name} (Copia)`,
-    //       },
-    //     ],
-
-    //     editingPolygonId: null,
-
-    //     editingBackup: null,
-    //   };
-    // }
-
-    case 'SAVE_EDITED_POLYGON':
       return {
         ...state,
 
-        polygons: [...state.polygons, structuredClone(state.editingPolygon)],
+        polygons: [...state.polygons, polygon],
+
+        topPolygonId: polygon.id,
 
         editingPolygon: null,
         editingBackup: null,
         editingPolygonId: null,
 
-        isDrawing: false,
         activePolygon: null,
+        isDrawing: false,
       };
+    }
 
     case 'SAVE_POLYGON_COPY':
       return {
@@ -301,6 +262,32 @@ export function territoriesReducer(state, action) {
 
         isDrawing: false,
         activePolygon: null,
+      };
+
+    // case 'BRING_POLYGON_TO_FRONT': {
+    //   const polygon = state.polygons.find((p) => p.id === action.payload);
+
+    //   if (!polygon) {
+    //     return state;
+    //   }
+
+    //   return {
+    //     ...state,
+    //     polygons: [...state.polygons.filter((p) => p.id !== polygon.id), polygon],
+    //   };
+    // }
+
+    case 'SELECT_POLYGON':
+      return {
+        ...state,
+        selectedPolygonId: action.payload,
+      };
+
+    case 'MOVE_POLYGON_TO_TOP':
+      return {
+        ...state,
+
+        topPolygonId: action.payload,
       };
 
     default:

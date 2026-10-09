@@ -1,20 +1,14 @@
 import MapView from '../map/components/MapView';
-
+import PolygonContextMenu from './components/PolygonContextMenu';
+import PolygonList from './components/PolygonList';
 import PolygonModal from './components/PolygonModal';
-
 import TerritoriesConsole from './components/TerritoriesConsole';
-
+import './components/TerritoriesConsole.css';
+import { useTerritoriesContext } from './context/TerritoriesContext';
+import { TerritoriesProvider } from './context/TerritoriesProvider';
 import TerritoriesDrawingLayer from './layers/TerritoriesDrawingLayer';
-
 import TerritoriesEditingLayer from './layers/TerritoriesEditingLayer';
 
-import { TerritoriesProvider } from './context/TerritoriesProvider';
-
-import { useTerritoriesContext } from './context/TerritoriesContext';
-
-import PolygonContextMenu from './components/PolygonContextMenu';
-
-import './components/TerritoriesConsole.css';
 function TerritoriesScreen() {
   const { state, addPoint, createPolygon, closePolygonModal } = useTerritoriesContext();
 
@@ -27,7 +21,7 @@ function TerritoriesScreen() {
       }}
     >
       <TerritoriesConsole />
-
+      <PolygonList />
       <PolygonContextMenu />
 
       <PolygonModal

@@ -18,4 +18,6 @@ export const territoriesInitialState = {
     y: 0,
     polygonId: null,
   },
+
+  topPolygonId: null,
 };
