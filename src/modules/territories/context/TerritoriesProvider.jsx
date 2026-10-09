@@ -58,6 +58,10 @@ export function TerritoriesProvider({ children }) {
   const openPolygonModal = () => {
     dispatch({
       type: 'SHOW_POLYGON_MODAL',
+      payload: {
+        mode: 'create',
+        polygonId: null,
+      },
     });
   };
 
@@ -257,6 +261,29 @@ export function TerritoriesProvider({ children }) {
     });
   };
 
+  const openEditPolygonModal = (polygonId) => {
+    dispatch({
+      type: 'SHOW_POLYGON_MODAL',
+      payload: {
+        mode: 'edit',
+        polygonId,
+      },
+    });
+
+    hideContextMenu();
+  };
+
+  const updatePolygonData = ({ id, name, color }) => {
+    dispatch({
+      type: 'EDIT_POLYGON_DATA',
+      payload: {
+        id,
+        name,
+        color,
+      },
+    });
+  };
+
   return (
     <TerritoriesContext.Provider
       value={{
@@ -296,9 +323,11 @@ export function TerritoriesProvider({ children }) {
         deleteVertex,
         insertVertex,
 
-        // bringPolygonToFront,
         selectPolygon,
         movePolygonToTop,
+
+        openEditPolygonModal,
+        updatePolygonData,
       }}
     >
       {children}

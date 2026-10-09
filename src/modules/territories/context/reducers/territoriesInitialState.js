@@ -2,10 +2,12 @@ export const territoriesInitialState = {
   polygons: [],
   activePolygon: null,
   isDrawing: false,
-  showPolygonModal: false,
+  //showPolygonModal: false,
 
   polygonModal: {
     visible: false,
+    mode: 'create',
+    polygonId: null,
   },
 
   editingPolygonId: null,

@@ -9,6 +9,7 @@ export default function PolygonContextMenu() {
     exportPolygonKml,
     exportPolygonExcel,
     startEditPolygon,
+    openEditPolygonModal,
   } = useTerritoriesContext();
   if (!state.contextMenu.visible) {
     return null;
@@ -35,9 +36,13 @@ export default function PolygonContextMenu() {
           top: state.contextMenu.y,
         }}
       >
+        <button onClick={() => openEditPolygonModal(polygonId)}>
+          <FiEdit />
+          Editar Nombre/Color
+        </button>
         <button onClick={() => startEditPolygon(polygonId)}>
           <FiEdit />
-          Editar
+          Editar Vertices
         </button>
         <button onClick={() => exportPolygonKml(polygonId)}>
           <FiMap />

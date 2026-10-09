@@ -3,19 +3,34 @@ export function territoriesReducer(state, action) {
     case 'SHOW_POLYGON_MODAL':
       return {
         ...state,
-        showPolygonModal: true,
+
+        polygonModal: {
+          visible: true,
+          mode: action.payload?.mode || 'create',
+          polygonId: action.payload?.polygonId || null,
+        },
       };
 
     case 'HIDE_POLYGON_MODAL':
       return {
         ...state,
-        showPolygonModal: false,
-      };
 
+        polygonModal: {
+          visible: false,
+          mode: 'create',
+          polygonId: null,
+        },
+      };
     case 'START_POLYGON':
       return {
         ...state,
-        showPolygonModal: false,
+
+        polygonModal: {
+          visible: false,
+          mode: 'create',
+          polygonId: null,
+        },
+
         isDrawing: true,
 
         activePolygon: {
@@ -288,6 +303,27 @@ export function territoriesReducer(state, action) {
         ...state,
 
         topPolygonId: action.payload,
+      };
+
+    case 'EDIT_POLYGON_DATA':
+      return {
+        ...state,
+
+        polygons: state.polygons.map((polygon) =>
+          polygon.id === action.payload.id
+            ? {
+                ...polygon,
+                name: action.payload.name,
+                color: action.payload.color,
+              }
+            : polygon
+        ),
+
+        polygonModal: {
+          visible: false,
+          mode: 'create',
+          polygonId: null,
+        },
       };
 
     default:

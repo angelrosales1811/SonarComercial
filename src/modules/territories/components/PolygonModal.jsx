@@ -2,15 +2,32 @@ import { useEffect, useState } from 'react';
 import { FiX } from 'react-icons/fi';
 import { PiPolygon } from 'react-icons/pi';
 
-export default function PolygonModal({ isOpen, onClose, onSave }) {
+export default function PolygonModal({
+  isOpen,
+  onClose,
+  onSave,
+  initialName = '',
+  initialColor = '',
+  mode = 'create',
+}) {
   const [name, setName] = useState('');
   const [color, setColor] = useState('');
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) {
+      return;
+    }
+
+    if (mode === 'edit') {
+      setName(initialName);
+      setColor(initialColor);
+      return;
+    }
+
     setName(generateRandomName());
     setColor(generateRandomColor());
-  }, [isOpen]);
+  }, [isOpen, mode, initialName, initialColor]);
+
   if (!isOpen) {
     return null;
   }
@@ -44,8 +61,8 @@ export default function PolygonModal({ isOpen, onClose, onSave }) {
       color,
     });
 
-    setName(generateRandomName());
-    setColor(generateRandomColor());
+    // setName(generateRandomName());
+    // setColor(generateRandomColor());
   };
 
   function generateRandomName() {
@@ -62,7 +79,7 @@ export default function PolygonModal({ isOpen, onClose, onSave }) {
         <div className="polygon-modal-header">
           <h2>
             <PiPolygon />
-            Nuevo Polígono
+            {mode === 'edit' ? 'Editar Polígono' : 'Nuevo Polígono'}
           </h2>
 
           <button className="polygon-modal-close" onClick={onClose}>
@@ -95,7 +112,7 @@ export default function PolygonModal({ isOpen, onClose, onSave }) {
           </button>
 
           <button className="btn btn-primary" onClick={handleSave}>
-            Crear Polígono
+            {mode === 'edit' ? 'Guardar Cambios' : 'Crear Polígono'}
           </button>
         </div>
       </div>
